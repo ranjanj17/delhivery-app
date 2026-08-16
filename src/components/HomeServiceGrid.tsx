@@ -15,6 +15,7 @@ const fullCardHeight = 110; // Exact fixed height for the horizontal layout
 
 export default function HomeServiceGrid() {
   const [isCard1Pressed, setIsCard1Pressed] = React.useState(false);
+  const [isCard2Pressed, setIsCard2Pressed] = React.useState(false);
   const [isCard3Pressed, setIsCard3Pressed] = React.useState(false);
 
   return (
@@ -55,18 +56,15 @@ export default function HomeServiceGrid() {
           >
             <View style={styles.imageContainer}>
               <MotiView
-                style={{ position: 'absolute', left: 16, top: 4 }}
-                animate={{ translateX: isCard1Pressed ? 6 : 0 }}
+                style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
+                animate={{ scale: isCard1Pressed ? 1.05 : 1 }}
                 transition={{ type: 'spring', damping: 12, stiffness: 300 }}
               >
-                <Truck color="#111" size={44} strokeWidth={1.5} />
-              </MotiView>
-              <MotiView
-                style={{ position: 'absolute', right: 16, bottom: 4 }}
-                animate={{ translateX: isCard1Pressed ? -6 : 0 }}
-                transition={{ type: 'spring', damping: 12, stiffness: 300 }}
-              >
-                <Bike color="#E63946" size={32} strokeWidth={1.5} />
+                <Image
+                  source={require('@/assets/images/book_bike_truck.png')}
+                  style={{ width: '120%', height: '120%' }}
+                  resizeMode="contain"
+                />
               </MotiView>
             </View>
             <View style={styles.cardContent}>
@@ -88,7 +86,11 @@ export default function HomeServiceGrid() {
           transition={{ type: 'spring', damping: 15, stiffness: 120, delay: 200 }}
         >
           <MotiPressable
-            onPressIn={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            onPressIn={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              setIsCard2Pressed(true);
+            }}
+            onPressOut={() => setIsCard2Pressed(false)}
             animate={({ hovered, pressed }) => {
               'worklet'
               return { scale: pressed ? 0.96 : hovered ? 0.98 : 1 }
@@ -97,9 +99,17 @@ export default function HomeServiceGrid() {
             style={styles.halfCard}
           >
             <View style={styles.imageContainer}>
-              <View style={styles.boxShape}>
-                <Package color="#FFF" size={32} strokeWidth={1.5} />
-              </View>
+               <MotiView
+                 style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
+                 animate={{ scale: isCard2Pressed ? 1.08 : 1 }}
+                 transition={{ type: 'spring', damping: 12, stiffness: 300 }}
+               >
+                 <Image
+                   source={require('@/assets/images/national_courier_parcel.png')}
+                   style={{ width: '120%', height: '120%' }}
+                   resizeMode="contain"
+                 />
+               </MotiView>
             </View>
             <View style={styles.cardContent}>
               <View style={styles.textBlock}>
@@ -257,17 +267,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     position: 'relative',
   },
-  boxShape: {
-    width: 68,
-    height: 68,
-    backgroundColor: '#404040',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderTopWidth: 8,
-    borderTopColor: '#EA2C3E', // The red tape
-  },
-
   cardContent: {
     height: '45%',
     justifyContent: 'center',
