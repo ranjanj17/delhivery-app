@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   storiesSection: {
     paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
-    backgroundColor: '#FFFFFF', // Clean white to separate from grid
+    backgroundColor: '#F8FAFC', // Very light slate to visually separate from a white bottom bar
   },
   sectionTitle: {
     fontSize: 18,

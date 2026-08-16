@@ -4,9 +4,19 @@ import { Colors, Spacing, Radii } from '@/theme/tokens';
 import { Gift } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
-const SLIDE_COUNT = 2;
+const SLIDE_COUNT = 3;
 
 const SlideGif = () => (
+  <View style={styles.slide}>
+    <Image 
+      source={require('@/assets/images/promo_banner.gif')} 
+      style={styles.gifBanner}
+      resizeMode="cover"
+    />
+  </View>
+);
+
+const SlideGifOld = () => (
   <View style={styles.slide}>
     <Image 
       source={require('@/assets/images/rakhi_promo.gif')} 
@@ -41,11 +51,12 @@ const SlideBanner = () => (
 
 const slides = [
   <SlideGif key="slide-0" />,
-  <SlideBanner key="slide-1" />
+  <SlideBanner key="slide-1" />,
+  <SlideGifOld key="slide-2" />
 ];
 
 const infiniteSlides = [
-  <SlideBanner key="clone-last" />, // Clone of last slide
+  <SlideGifOld key="clone-last" />, // Clone of last slide
   ...slides,
   <SlideGif key="clone-first" />    // Clone of first slide
 ];
@@ -116,7 +127,7 @@ const styles = StyleSheet.create({
   },
   slide: {
     width: width,
-    paddingHorizontal: Spacing.lg,
+    paddingHorizontal: Spacing.md,
   },
   gifBanner: {
     width: '100%',
