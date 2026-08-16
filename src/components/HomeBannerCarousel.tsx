@@ -110,7 +110,8 @@ export default function HomeBannerCarousel() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: Spacing.lg,
+    paddingTop: 6,
+    paddingBottom: Spacing.xs,
     backgroundColor: 'transparent',
   },
   slide: {
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: Spacing.lg,
+    marginTop: Spacing.xs,
     gap: 6,
   },
   dot: {

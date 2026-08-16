@@ -5,12 +5,17 @@ import { MotiPressable } from 'moti/interactions';
 import * as Haptics from 'expo-haptics';
 import { Zap, ArrowDown, Truck, Package, Bike } from 'lucide-react-native';
 
-const { width } = Dimensions.get('window');
-const cardWidth = (width - Spacing.lg * 2 - Spacing.md) / 2;
+const { width, height } = Dimensions.get('window');
+const cardWidth = (width - Spacing.md * 2 - Spacing.md) / 2;
+const halfCardHeight = cardWidth * 0.9; // Adjusted so width is greater than height per feedback
+const fullCardHeight = 110; // Exact fixed height for the horizontal layout
 
 export default function HomeServiceGrid() {
   return (
     <View style={styles.container}>
+      {/* White underlay to make the bottom radius curve visible against the white stories section */}
+      <View style={styles.whiteUnderlay} />
+
       {/* Background shape */}
       <View style={styles.backgroundShape} />
       
@@ -26,14 +31,16 @@ export default function HomeServiceGrid() {
           style={styles.halfCard}
         >
           <View style={styles.imageContainer}>
-             <Truck color="#333" size={40} style={{ position: 'absolute', left: 10, top: 10 }} />
-             <Bike color="#E63946" size={32} style={{ position: 'absolute', right: 10, bottom: 10 }} />
+             <Truck color="#111" size={44} strokeWidth={1.5} style={{ position: 'absolute', left: 16, top: 4 }} />
+             <Bike color="#E63946" size={32} strokeWidth={1.5} style={{ position: 'absolute', right: 16, bottom: 4 }} />
           </View>
           <View style={styles.cardContent}>
-            <Text style={styles.title}>Book Bike/Truck</Text>
-            <View style={styles.subtitleRow}>
-              <Zap color={Colors.textMuted} size={14} />
-              <Text style={styles.subtitle}>Fast Pick-up</Text>
+            <View style={styles.textBlock}>
+              <Text style={styles.title}>Book Bike/Truck</Text>
+              <View style={styles.subtitleRow}>
+                <Zap color={Colors.textMuted} size={14} />
+                <Text style={styles.subtitle}>Fast Pick-up</Text>
+              </View>
             </View>
           </View>
         </MotiPressable>
@@ -50,14 +57,16 @@ export default function HomeServiceGrid() {
         >
           <View style={styles.imageContainer}>
              <View style={styles.boxShape}>
-                <Package color="#FFF" size={32} />
+                <Package color="#FFF" size={32} strokeWidth={1.5} />
              </View>
           </View>
           <View style={styles.cardContent}>
-            <Text style={styles.title}>National Courier</Text>
-            <View style={styles.subtitleRow}>
-              <ArrowDown color={Colors.textMuted} size={14} />
-              <Text style={styles.subtitle}>Price Drop</Text>
+            <View style={styles.textBlock}>
+              <Text style={styles.title}>National Courier</Text>
+              <View style={styles.subtitleRow}>
+                <ArrowDown color={Colors.textMuted} size={14} />
+                <Text style={styles.subtitle}>Price Drop</Text>
+              </View>
             </View>
           </View>
         </MotiPressable>
@@ -78,8 +87,7 @@ export default function HomeServiceGrid() {
           
           <View style={styles.fullCardInner}>
             <View style={styles.largeImageContainer}>
-               <Truck color="#333" size={60} strokeWidth={1.5} />
-               <View style={styles.redContainerBadge} />
+               <Truck color="#111" size={72} strokeWidth={1.5} style={{ position: 'absolute' }} />
             </View>
             <View style={styles.fullCardContent}>
               <Text style={styles.fullCardTitle}>Multi-Box Shipping</Text>
@@ -95,20 +103,31 @@ export default function HomeServiceGrid() {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: Spacing.lg,
-    paddingTop: Spacing.sm,
-    paddingBottom: Spacing.xxl,
+    paddingHorizontal: Spacing.md, // 16px equal spacing
+    paddingTop: Spacing.md,
+    paddingBottom: Spacing.md,
     position: 'relative',
+  },
+  whiteUnderlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 100, // covers the bottom portion behind the curve
+    backgroundColor: '#FFFFFF',
+    zIndex: -1,
   },
   backgroundShape: {
     position: 'absolute',
-    top: 40,
+    top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
+    bottom: 0, // Stop at the end of the grid padding
     backgroundColor: '#EBF0F6', // The light blue/grey curve background
-    borderTopLeftRadius: 40,
-    borderTopRightRadius: 40,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderBottomLeftRadius: 24, // Matches top radius
+    borderBottomRightRadius: 24, // Matches top radius
     zIndex: 0,
   },
   grid: {
@@ -120,9 +139,10 @@ const styles = StyleSheet.create({
   },
   halfCard: {
     width: cardWidth,
+    height: halfCardHeight,
     backgroundColor: Colors.surface,
-    borderRadius: Radii.xl,
-    padding: Spacing.lg,
+    borderRadius: Radii.xl, // Perfect 24px Apple-like squircle radius matching crop
+    padding: Spacing.md,
     shadowColor: Colors.textDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -130,10 +150,12 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   fullCard: {
-    width: width - Spacing.lg * 2, // Exact calculated width instead of '100%'
+    width: width - Spacing.md * 2,
+    height: fullCardHeight,
     backgroundColor: Colors.surface,
-    borderRadius: Radii.xl,
-    padding: Spacing.lg,
+    borderRadius: Radii.xl, // Perfect 24px Apple-like squircle radius matching crop
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.md,
     shadowColor: Colors.textDark,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
@@ -144,62 +166,59 @@ const styles = StyleSheet.create({
   fullCardInner: {
     flexDirection: 'row',
     alignItems: 'center',
+    height: '100%',
     gap: Spacing.md,
   },
   imageContainer: {
-    height: 80,
-    marginBottom: Spacing.md,
+    height: '55%',
+    width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
   largeImageContainer: {
-    width: 80,
-    height: 80,
+    width: '35%',
+    height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
     position: 'relative',
   },
   boxShape: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#4A4A4A',
-    borderRadius: 8,
+    width: 68,
+    height: 68,
+    backgroundColor: '#404040',
+    borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     borderTopWidth: 8,
     borderTopColor: '#EA2C3E', // The red tape
   },
-  redContainerBadge: {
-    position: 'absolute',
-    right: 0,
-    top: 10,
-    width: 30,
-    height: 30,
-    backgroundColor: '#EA2C3E',
-    borderRadius: 4,
-    zIndex: -1,
-  },
+
   cardContent: {
+    height: '45%',
+    justifyContent: 'center',
     alignItems: 'center',
+  },
+  textBlock: {
+    alignItems: 'flex-start',
   },
   fullCardContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-start',
+    gap: 4,
   },
   title: {
     fontSize: 15,
     fontWeight: '800',
     color: '#1A1A1A',
     marginBottom: 6,
-    textAlign: 'center',
+    textAlign: 'left',
   },
   fullCardTitle: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '800',
     color: '#1A1A1A',
-    marginBottom: 6,
     textAlign: 'left',
   },
   subtitleRow: {
@@ -208,18 +227,18 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   subtitle: {
-    fontSize: 12,
-    color: Colors.textMuted,
+    fontSize: 11,
+    color: '#7C8798', // Muted slate color exactly from image
     fontWeight: '500',
   },
   badge: {
     position: 'absolute',
-    top: Spacing.md,
-    right: Spacing.md,
-    backgroundColor: '#059669', // Exact green badge color
-    paddingHorizontal: 8,
+    top: 12,
+    right: 12,
+    backgroundColor: '#10B981', // Emerald green badge color from crop
+    paddingHorizontal: 10,
     paddingVertical: 4,
-    borderRadius: Radii.md,
+    borderRadius: 12,
     zIndex: 2,
   },
   badgeText: {

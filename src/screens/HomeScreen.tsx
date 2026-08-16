@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
   storiesSection: {
     paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
-    backgroundColor: '#EBF0F6', // Matches the curved background
+    backgroundColor: '#FFFFFF', // Clean white to separate from grid
   },
   sectionTitle: {
     fontSize: 18,
