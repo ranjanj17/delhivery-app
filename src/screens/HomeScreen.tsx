@@ -11,6 +11,7 @@ import HomeServiceGrid from '@/components/HomeServiceGrid';
 import HomeAnimatedBackground from '@/components/HomeAnimatedBackground';
 
 import { MotiView } from 'moti';
+import { MotiPressable } from 'moti/interactions';
 import { CheckCircle2, Clock } from 'lucide-react-native';
 
 const DATA = [
@@ -21,11 +22,87 @@ const DATA = [
 
 const mockStories = [
   { id: '1', title: 'Deliveries Made Easy', isSpecial: true },
-  { id: '2', title: 'Rakhi Special', isSpecial: false },
-  { id: '3', title: 'Pan India', isSpecial: false },
-  { id: '4', title: 'Cold Chain', isSpecial: false },
-  { id: '5', title: 'B2B Logistics', isSpecial: false },
+  { id: '2', title: 'Pan India', image: require('@/assets/images/story_pan_india.jpg') },
+  { id: '3', title: 'Extreme Reach', image: require('@/assets/images/story_snow.jpg') },
+  { id: '4', title: 'B2B Logistics', image: require('@/assets/images/story_boxes.jpg') },
+  { id: '5', title: 'Celebrating India', image: require('@/assets/images/story_celebrate.jpg') },
 ];
+
+const StoryItem = ({ item, index }: { item: any; index: number }) => {
+  return (
+    <MotiView
+      from={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ type: 'spring', damping: 15, delay: 300 + index * 100 }}
+      style={{ marginRight: Spacing.md, alignItems: 'center', width: 78 }}
+    >
+      <MotiPressable
+        animate={({ hovered, pressed }) => {
+          'worklet';
+          return {
+            scale: pressed ? 0.9 : hovered ? 0.96 : 1,
+          };
+        }}
+        transition={{ type: 'spring', damping: 12, mass: 1, stiffness: 250 }}
+      >
+        <MotiView 
+          style={styles.storyOuterCircle}
+          animate={{
+            borderColor: ['#EA2C3E', '#FCA5A5', '#EA2C3E'],
+          }}
+          transition={{
+            type: 'timing',
+            duration: 2000,
+            loop: true,
+          }}
+        >
+          <View style={styles.storyWhiteBorder}>
+            <View style={[
+              styles.storyInnerCircle, 
+              item.isSpecial ? {backgroundColor: '#EA2C3E'} : {backgroundColor: 'transparent'}
+            ]}>
+               {item.isSpecial && (
+                 <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 2 }}>
+                   <Text style={{color: 'white', fontSize: 7, fontWeight: '800', marginBottom: 1, letterSpacing: 0.5}}>DELIVERIES</Text>
+                   <MotiView
+                     from={{ scale: 1 }}
+                     animate={{ scale: 1.15 }}
+                     transition={{
+                       type: 'timing',
+                       duration: 1200,
+                       loop: true,
+                       repeatReverse: true,
+                     }}
+                     style={{ alignItems: 'center' }}
+                   >
+                     <Text style={{color: 'white', fontSize: 14, fontWeight: '900', lineHeight: 14}}>MADE</Text>
+                     <Text style={{color: 'white', fontSize: 14, fontWeight: '900', lineHeight: 14}}>EASY</Text>
+                   </MotiView>
+                 </View>
+               )}
+               {item.image && (
+                 <MotiView
+                   from={{ scale: 1 }}
+                   animate={{ scale: 1.2 }}
+                   transition={{
+                     type: 'timing',
+                     duration: 6000,
+                     loop: true,
+                     repeatReverse: true,
+                   }}
+                   style={{ width: '100%', height: '100%' }}
+                 >
+                   <Image source={item.image} style={{ width: 66, height: 66, borderRadius: 33 }} resizeMode="cover" />
+                 </MotiView>
+               )}
+            </View>
+          </View>
+        </MotiView>
+      </MotiPressable>
+      <Text style={styles.storyTitle} numberOfLines={1}>{item.title === 'Deliveries Made Easy' ? 'New Features' : item.title}</Text>
+    </MotiView>
+  );
+};
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
@@ -82,20 +159,7 @@ export default function HomeScreen() {
               horizontal
               showsHorizontalScrollIndicator={false}
               contentContainerStyle={{ paddingHorizontal: Spacing.lg }}
-              renderItem={({ item }) => (
-                <View style={styles.storyOuterCircle}>
-                  <View style={styles.storyWhiteBorder}>
-                    <View style={[
-                      styles.storyInnerCircle, 
-                      item.isSpecial ? {backgroundColor: '#EA2C3E'} : {}
-                    ]}>
-                       {item.isSpecial && (
-                         <Text style={{color: 'white', fontSize: 10, fontWeight: '800', textAlign: 'center'}}>MADE{'\n'}EASY</Text>
-                       )}
-                    </View>
-                  </View>
-                </View>
-              )}
+              renderItem={({ item, index }) => <StoryItem item={item} index={index} />}
             />
           </View>
         )}
@@ -159,7 +223,9 @@ const styles = StyleSheet.create({
   storiesSection: {
     paddingTop: Spacing.md,
     paddingBottom: Spacing.xxl,
-    backgroundColor: '#F8FAFC', // Very light slate to visually separate from a white bottom bar
+    backgroundColor: '#FEFCE8', // Ultra-light yellow background
+    borderTopLeftRadius: Radii.xl,
+    borderTopRightRadius: Radii.xl,
   },
   sectionTitle: {
     fontSize: 18,
@@ -176,7 +242,6 @@ const styles = StyleSheet.create({
     borderColor: '#EA2C3E', // The exact red border
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: Spacing.md,
   },
   storyWhiteBorder: {
     width: 70,
@@ -195,6 +260,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#D1D5DB', // Placeholder grey image
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  storyTitle: {
+    fontSize: 11,
+    color: '#4B5563',
+    fontWeight: '600',
+    marginTop: 6,
+    textAlign: 'center',
+    width: '100%',
   },
   sheetBackground: {
     backgroundColor: Colors.surface,

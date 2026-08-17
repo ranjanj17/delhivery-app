@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions, Image } from 'react-native';
 import { Colors, Spacing, Radii, Motion } from '@/theme/tokens';
 import { MotiView } from 'moti';
 import { MotiPressable } from 'moti/interactions';
-import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing } from 'react-native-reanimated';
+import Animated, { useSharedValue, useAnimatedStyle, withRepeat, withTiming, Easing, interpolate, Extrapolation } from 'react-native-reanimated';
 import * as Haptics from 'expo-haptics';
 import { Zap, ArrowDown, Truck, Package, Bike } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,6 +17,41 @@ export default function HomeServiceGrid() {
   const [isCard1Pressed, setIsCard1Pressed] = React.useState(false);
   const [isCard2Pressed, setIsCard2Pressed] = React.useState(false);
   const [isCard3Pressed, setIsCard3Pressed] = React.useState(false);
+
+  // Precise Reanimated Heartbeat State
+  const pulseScale = useSharedValue(0.7); // Starts at medium size (10px)
+  const dropY = useSharedValue(-3); // Price drop arrow
+
+  React.useEffect(() => {
+    pulseScale.value = withRepeat(
+      withTiming(1.5, { duration: 1200, easing: Easing.inOut(Easing.ease) }),
+      -1, // Infinite loop
+      true // Reverse (yoyo) perfectly back and forth
+    );
+    dropY.value = withRepeat(
+      withTiming(3, { duration: 600, easing: Easing.inOut(Easing.ease) }),
+      -1,
+      true
+    );
+  }, []);
+
+  const animatedIconStyle = useAnimatedStyle(() => {
+    // Only shine when scale is approaching maximum
+    const shineIntensity = interpolate(
+      pulseScale.value,
+      [1.2, 1.5], // starts glowing at scale 1.2, reaches max at 1.5
+      [0, 1],
+      Extrapolation.CLAMP
+    );
+    return {
+      transform: [{ scale: pulseScale.value }],
+      shadowOpacity: shineIntensity,
+    };
+  });
+
+  const animatedArrowStyle = useAnimatedStyle(() => ({
+    transform: [{ translateY: dropY.value }],
+  }));
 
   return (
     <View style={styles.container}>
@@ -70,9 +105,30 @@ export default function HomeServiceGrid() {
             <View style={styles.cardContent}>
               <View style={styles.textBlock}>
                 <Text style={styles.title}>Book Bike/Truck</Text>
-                <View style={styles.subtitleRow}>
-                  <Zap color={Colors.textMuted} size={14} />
-                  <Text style={styles.subtitle}>Fast Pick-up</Text>
+                {/* Fast Pick-up Star Shine Badge */}
+                <View style={[styles.badgeRow, { backgroundColor: 'transparent' }]}>
+                  
+                  {/* Flawless Grow & Shine Zap Icon */}
+                  <Animated.View style={[animatedIconStyle, { 
+                    marginRight: 6, zIndex: 1,
+                    shadowColor: '#FDE047', // Brilliant yellow for shine
+                    shadowOffset: { width: 0, height: 0 }, 
+                    shadowRadius: 10, 
+                    elevation: 10 
+                  }]}>
+                    <Zap color="#F59E0B" size={14} fill="#F59E0B" />
+                  </Animated.View>
+
+                  {/* Clean text with slight glow */}
+                  <Text style={[styles.badgeTextActive, { 
+                    zIndex: 1,
+                    color: '#D97706',
+                    textShadowColor: 'rgba(245, 158, 11, 0.4)', 
+                    textShadowOffset: { width: 0, height: 0 }, 
+                    textShadowRadius: 4 
+                  }]}>
+                    Fast Pick-up
+                  </Text>
                 </View>
               </View>
             </View>
@@ -115,8 +171,10 @@ export default function HomeServiceGrid() {
               <View style={styles.textBlock}>
                 <Text style={styles.title}>National Courier</Text>
                 <View style={styles.subtitleRow}>
-                  <ArrowDown color={Colors.textMuted} size={14} />
-                  <Text style={styles.subtitle}>Price Drop</Text>
+                  <Animated.View style={animatedArrowStyle}>
+                    <ArrowDown color="#10B981" size={14} strokeWidth={3} />
+                  </Animated.View>
+                  <Text style={[styles.subtitle, { color: '#059669', fontWeight: '700' }]}>Price Drop</Text>
                 </View>
               </View>
             </View>
@@ -303,6 +361,20 @@ const styles = StyleSheet.create({
     fontSize: 11,
     color: '#7C8798', // Muted slate color exactly from image
     fontWeight: '500',
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 4,
+    paddingHorizontal: 0,
+    paddingVertical: 0,
+    borderRadius: 6,
+    alignSelf: 'flex-start',
+  },
+  badgeTextActive: {
+    fontSize: 11,
+    color: '#E63946',
+    fontWeight: '700',
   },
   badge: {
     position: 'absolute',
