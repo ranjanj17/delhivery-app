@@ -4,6 +4,9 @@ A premium, highly-animated, pixel-perfect clone of the Delhivery mobile applicat
 
 ---
 
+🎥 **[Watch the Full Demo Video Here](https://drive.google.com/file/d/1Ic1ydDVVIo6iI6x5o_iCRdIP9VC0Frq-/view?usp=sharing)**
+
+---
 ## 1. Project Overview
 
 This repository is a comprehensive UI/UX clone of the Delhivery mobile app, demonstrating advanced React Native engineering. The application prioritizes fluid 60FPS animations, meticulous styling based on strict brand guidelines, and modern architectural patterns using bleeding-edge libraries like Expo Router, Reanimated 3, and Moti.
