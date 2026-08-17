@@ -14,7 +14,7 @@ export default function RootLayout() {
     <GestureHandlerRootView style={styles.container}>
       <Provider store={store}>
         <QueryClientProvider client={queryClient}>
-          <Stack>
+          <Stack screenOptions={{ animation: 'slide_from_right' }}>
             <Stack.Screen name="index" options={{ headerShown: false }} />
           </Stack>
         </QueryClientProvider>

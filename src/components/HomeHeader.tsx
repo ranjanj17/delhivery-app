@@ -4,22 +4,30 @@ import { Colors, Spacing, Radii } from '@/theme/tokens';
 import { Navigation, Search, MessageSquare, ChevronDown } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 import { MotiView } from 'moti';
+import { useRouter } from 'expo-router';
+import { useNavigationStore } from '@/store/useNavigationStore';
 
 export default function HomeHeader() {
+  const router = useRouter();
+  const setActiveTab = useNavigationStore((state) => state.setActiveTab);
+
   return (
     <View style={styles.container}>
       <View style={styles.topRow}>
         <Pressable 
           style={styles.locationContainer}
-          onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+          onPress={() => {
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+            router.push('/location-search');
+          }}
         >
           <Navigation color="#E63946" size={20} strokeWidth={2.5} style={{ transform: [{ rotate: '0deg' }] }} />
-          <View style={styles.textContainer}>
+          <View style={[styles.textContainer, { overflow: 'hidden' }]}>
             <View style={styles.locationRow}>
               <Text style={styles.locationLabel}>Pickup From</Text>
               <ChevronDown color="#333" size={16} strokeWidth={2.5} style={styles.dropdownIcon} />
             </View>
-            <Text style={styles.locationAddress} numberOfLines={1}>
+            <Text style={styles.locationAddress} numberOfLines={1} ellipsizeMode="tail">
               Bhavya pristine, Bhoganhalli
             </Text>
           </View>
@@ -28,7 +36,10 @@ export default function HomeHeader() {
         <View style={styles.actions}>
           <View style={{ width: 38, height: 38, alignItems: 'flex-end' }}>
             <Pressable 
-              onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+              onPress={() => {
+                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+                setActiveTab('orders');
+              }}
               style={{ position: 'absolute', right: 0, zIndex: 10 }}
             >
               <MotiView
@@ -72,7 +83,7 @@ export default function HomeHeader() {
                     loop: true,
                     repeatReverse: false,
                   }}
-                  style={{ position: 'absolute', left: 34, width: 50 }}
+                  style={{ position: 'absolute', left: 38, width: 50 }}
                 >
                   <Text style={{ fontSize: 13, fontWeight: '700', color: Colors.textDark }} numberOfLines={1}>Track</Text>
                 </MotiView>
@@ -81,7 +92,10 @@ export default function HomeHeader() {
           </View>
           <Pressable 
             style={styles.helpButton}
-            onPress={() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)}
+            onPress={() => {
+              Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+              router.push('/help');
+            }}
           >
             <MotiView
               from={{ rotateZ: '0deg', translateY: 0 }}
@@ -122,7 +136,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.sm,
     flex: 1,
-    marginRight: Spacing.md + 40,
+    marginRight: Spacing.md + 45,
     backgroundColor: 'rgba(255, 255, 255, 0.65)',
     paddingHorizontal: 12,
     paddingVertical: 6,

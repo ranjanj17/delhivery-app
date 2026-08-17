@@ -4,6 +4,8 @@ import { Colors, Spacing, Radii } from '@/theme/tokens';
 import { Package, Truck, ChevronRight } from 'lucide-react-native';
 import * as Haptics from 'expo-haptics';
 
+import { MotiView, MotiText } from 'moti';
+
 export default function ActiveTrackingCard() {
   return (
     <Pressable 
@@ -13,8 +15,25 @@ export default function ActiveTrackingCard() {
       {/* Top Row: Status and AWB */}
       <View style={styles.topRow}>
         <View style={styles.statusBadge}>
-          <View style={styles.statusDot} />
-          <Text style={styles.statusText}>IN TRANSIT</Text>
+          <View style={{ justifyContent: 'center', alignItems: 'center', marginRight: 6 }}>
+            {/* Animated Ripple */}
+            <MotiView
+              from={{ scale: 1, opacity: 0.8 }}
+              animate={{ scale: 4, opacity: 0 }}
+              transition={{ type: 'timing', duration: 1500, loop: true }}
+              style={[styles.statusDot, { position: 'absolute', marginRight: 0 }]}
+            />
+            {/* Static Center Dot */}
+            <View style={[styles.statusDot, { marginRight: 0 }]} />
+          </View>
+          <MotiText 
+            from={{ textShadowRadius: 0, opacity: 0.9 }}
+            animate={{ textShadowRadius: 8, opacity: 1 }}
+            transition={{ type: 'timing', duration: 1500, loop: true, direction: 'alternate' }}
+            style={[styles.statusText, { textShadowColor: 'rgba(16, 185, 129, 0.6)' }]}
+          >
+            IN TRANSIT
+          </MotiText>
         </View>
         <Text style={styles.awbText}>AWB 8472910384</Text>
       </View>

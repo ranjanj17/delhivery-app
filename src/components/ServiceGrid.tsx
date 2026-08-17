@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Colors, Spacing, Radii, Motion } from '@/theme/tokens';
 import { MotiPressable } from 'moti/interactions';
 import * as Haptics from 'expo-haptics';
-import { Bike, Box, Truck } from 'lucide-react-native';
+import { Bike, Box, Truck, Package } from 'lucide-react-native';
 
 const { width } = Dimensions.get('window');
 const cardWidth = (width - Spacing.lg * 2 - Spacing.md) / 2;
@@ -11,6 +11,8 @@ const cardWidth = (width - Spacing.lg * 2 - Spacing.md) / 2;
 const services = [
   { id: '1', title: 'Book Bike', subtitle: 'Fast Pick-up', icon: Bike },
   { id: '2', title: 'Courier', subtitle: 'Price Drop', icon: Box },
+  { id: '3', title: 'B2B Truck', subtitle: 'Heavy Load', icon: Truck },
+  { id: '4', title: 'Packers', subtitle: 'Home Shift', icon: Package },
 ];
 
 export default function ServiceGrid() {
@@ -40,8 +42,6 @@ export default function ServiceGrid() {
             </View>
           </MotiPressable>
         ))}
-        {/* Placeholder / Skeleton Card */}
-        <View style={styles.placeholderCard} />
       </View>
     </View>
   );
