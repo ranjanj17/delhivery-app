@@ -154,11 +154,22 @@ export default function HomeServiceGrid() {
             transition={{ type: 'spring', damping: 12, mass: 1, stiffness: 250 }}
             style={styles.halfCard}
           >
-            <View style={styles.imageContainer}>
+             <View style={styles.imageContainer}>
                <MotiView
                  style={{ width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center' }}
-                 animate={{ scale: isCard2Pressed ? 1.08 : 1 }}
-                 transition={{ type: 'spring', damping: 12, stiffness: 300 }}
+                 from={{ translateY: -2 }}
+                 animate={{ 
+                   translateY: isCard2Pressed ? -15 : [2, -2],
+                   translateX: isCard2Pressed ? 15 : 0,
+                   scale: isCard2Pressed ? 1.05 : 1,
+                   rotateZ: isCard2Pressed ? '-15deg' : '0deg'
+                 }}
+                 transition={{ 
+                   translateY: isCard2Pressed 
+                     ? { type: 'spring', damping: 12, stiffness: 300 } 
+                     : { type: 'timing', duration: 1500, loop: true, direction: 'alternate', easing: Easing.inOut(Easing.ease) },
+                   default: { type: 'spring', damping: 12, stiffness: 300 } 
+                 }}
                >
                  <Image
                    source={require('@/assets/images/national_courier_parcel.png')}
@@ -166,7 +177,7 @@ export default function HomeServiceGrid() {
                    resizeMode="contain"
                  />
                </MotiView>
-            </View>
+             </View>
             <View style={styles.cardContent}>
               <View style={styles.textBlock}>
                 <Text style={styles.title}>National Courier</Text>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Plane, Cloud } from 'lucide-react-native';
+import { Cloud } from 'lucide-react-native';
 import Animated, { 
   useSharedValue, 
   useAnimatedStyle, 
@@ -154,7 +154,11 @@ export default function HomeAnimatedBackground() {
         <Animated.View style={[styles.smokeTrail, styles.smoke2, smokeStyle]} />
         <Animated.View style={[styles.smokeTrail, styles.smoke3, smokeStyle]} />
 
-        <Plane color="#E63946" size={48} strokeWidth={2.5} fill="#FFFFFF" />
+        <Image 
+          source={require('@/assets/images/delhivery_plane_transparent.png')} 
+          style={{ width: 80, height: 80 }} 
+          resizeMode="contain" 
+        />
       </Animated.View>
     </View>
   );
